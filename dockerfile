@@ -12,4 +12,4 @@ EXPOSE 3000
 RUN chmod +x /app/run.sh
 RUN chmod +x /app/Cli
 RUN chmod +x /app/TCli
-CMD /app/run.sh
+CMD [ "/app/run.sh" ]
