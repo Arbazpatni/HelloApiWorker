@@ -81,8 +81,10 @@ restart:
             }
             else {
                 printf("INFO: Message sent\n");
-                close(nfd);
-                goto restart;
+                printf("Keeping the connection Alive!\n");
+                //close(nfd);
+                //goto restart;
+                continue;
             }
         }
         clr(buffer, BUFF_SIZE);
