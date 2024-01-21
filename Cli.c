@@ -63,7 +63,7 @@ restart:
     while(TRUE) {
         clr(buffer, BUFF_SIZE); // clear the buffer
         bytes = read(nfd, buffer, BUFF_SIZE);
-        if(bytes < 0) {
+        if(bytes <= 0) {
             error("cannot read from the client\n");
         }
         else {
@@ -80,6 +80,7 @@ restart:
                 continue;
             }
             else {
+                printf("INFO: BYTES SENT : %d\n", bytes);
                 printf("INFO: Message sent\n");
                 printf("Keeping the connection Alive!\n");
                 //close(nfd);
