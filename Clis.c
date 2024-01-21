@@ -13,10 +13,11 @@
 void clr(char *, int);
 
 int main(int argc, char *argv[]) {
-    if(argc < 2) {
-        printf("ERROR: usage: %s port\n", argv[0]);
+    if(argc < 3) {
+        printf("ERROR: usage: %s port sleep\n", argv[0]);
     }
     int port_number = atoi(argv[1]);
+    int sleep_time = atoi(argv[2]);
     int fd = socket(AF_INET, SOCK_STREAM, 0); // get the file descriptor
     if(fd < 0) {
         printf("ERROR: Failed to create the socket\n");
@@ -87,7 +88,7 @@ restart:
             }
             else if(bytes == 37) {
                 printf("INFO: successfully sent the response!\n");
-                //sleep(5);
+                sleep(sleep_time);
                 printf("INFO: resuming to reset connection\n");
                 close(nfd);
                 goto restart;

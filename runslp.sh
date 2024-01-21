@@ -1,5 +1,5 @@
 #!/bin/bash
-#run.sh
+#runslp.sh
 function worker() {
     until /app/TCli "start" "accept" "--token" "76Pfhh/YHVMWe07SZsp6dO88Jcq27uOuAIU9K1TGsLI="
     do
@@ -8,10 +8,10 @@ function worker() {
     done
 }
 function thread() {
-    until /app/Cli "3000" #absolute path is very important otherwise error
+    until /app/Clis "3000" "5" #absolute path is very important otherwise error
     do
-        echo "Thread Process Crasher with exit code $?, Respawning ..."
-        sleep 1;
+        echo "Sleep Thread Process Crasher with exit code $?, Respawning ..."
+        sleep 1
     done
 }
 
