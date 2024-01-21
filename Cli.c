@@ -10,7 +10,6 @@
 #define TRUE 1        // 1 means infinite loop
 #define BUFF_SIZE 255 // buffer size
 
-void error(char *);
 void clr(char *, int);
 
 int main(int argc, char *argv[]) {
@@ -20,7 +19,8 @@ int main(int argc, char *argv[]) {
     int port_number = atoi(argv[1]);
     int fd = socket(AF_INET, SOCK_STREAM, 0); // get the file descriptor
     if(fd < 0) {
-        error("Failed to create the socket\n");
+        printf("ERROR: Failed to create the socket\n");
+        exit(1);
     }
     else {
         printf("INFO: Created socket\n");
@@ -40,7 +40,8 @@ int main(int argc, char *argv[]) {
     }
     status = listen(fd, 1); // set backlog to 1 and reusing file descriptor fd and status interger
     if(status < 0) {
-        error("Listen failed\n");
+        printf("ERROR: Listen failed\n");
+        exit(1);
     }
     else {
         printf("INFO: Listening on the given port: %s\n",argv[1]);
@@ -55,7 +56,9 @@ restart:
     printf("Waiting for new connection.....\n");
     int nfd = accept(fd, (struct sockaddr *) &client_address, &client_len); // create a new socket file descriptor to hold the new connection and pass the socket file descriptor
     if(nfd < 0) {
-        error("Accept failed\n");
+        printf("ERROR: Accept failed\n");
+        if(nfd != NULL) close(nfd);
+        goto restart;
     }
     else {
         printf("INFO: Established [accepted] a new connection to a client\n");
@@ -63,8 +66,10 @@ restart:
     while(TRUE) {
         clr(buffer, BUFF_SIZE); // clear the buffer
         bytes = read(nfd, buffer, BUFF_SIZE);
-        if(bytes <= 0) {
-            error("cannot read from the client\n");
+        if(bytes < 0) {
+            printf("ERROR: cannot read from the client\n");
+            close(nfd);
+            goto restart;
         }
         else {
             printf("INFO: Client: ");
@@ -76,14 +81,19 @@ restart:
             sprintf(buffer, "HTTP/1.1 200 OK\r\n\r\nHello From Server!");
             bytes = write(nfd, buffer, strlen(buffer));
             if(bytes < 0) {
-                error("cannot write to the client\n");
-                continue;
+                printf("ERROR: cannot write to the client\n");
+                close(nfd);
+                goto restart;
+            }
+            else if(bytes == 37) {
+                printf("INFO: successfully sent the response!\n");
+                sleep(5);
+                printf("INFO: resuming to reset connection\n");
+                close(nfd);
+                goto restart;
             }
             else {
-                printf("INFO: BYTES SENT : %d\n", bytes);
-                printf("INFO: Message sent\n");
-                printf("Keeping the connection Alive!\n");
-                sleep(5);
+                printf("ERROR: Sent bytes not equal to 37 something is fishy!\n");
                 close(nfd);
                 goto restart;
                 //continue;
@@ -94,10 +104,6 @@ restart:
     }
     close(fd);
     return 0;
-}
-void error(char *err) {
-    printf("ERROR: %s\n",err);
-    exit(1);
 }
 void clr(char *ptr, int len) {
     bzero(ptr, len);
