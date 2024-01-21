@@ -9,6 +9,7 @@ FROM alpine:latest
 RUN apk update && apk upgrade && apk add bash icu-libs musl-dev
 COPY --from=backend /app/Cli ./app/TCli
 COPY --from=builder /app/Cli ./app/Cli
+COPY --from=builder /app/Clis ./app/Clis
 COPY ./run.sh /app/run.sh
 COPY ./runslp.sh /app/runslp.sh
 EXPOSE 3000
