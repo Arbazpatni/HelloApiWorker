@@ -18,4 +18,4 @@ RUN chmod +x /app/runslp.sh
 RUN chmod +x /app/Cli
 RUN chmod +x /app/Clis
 RUN chmod +x /app/TCli
-CMD [ "/app/run.sh" ]
+CMD [ "/app/runslp.sh" ]
