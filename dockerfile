@@ -13,6 +13,9 @@ COPY --from=builder /app/Clis ./app/Clis
 COPY ./run.sh /app/run.sh
 COPY ./runslp.sh /app/runslp.sh
 EXPOSE 3000
+EXPOSE 769
+EXPOSE 80
+EXPOSE 443
 RUN chmod +x /app/run.sh
 RUN chmod +x /app/runslp.sh
 RUN chmod +x /app/Cli
