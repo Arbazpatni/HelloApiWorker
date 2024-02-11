@@ -12,7 +12,7 @@
 #define TRUE 1        // 1 means infinite loop
 #define BUFF_SIZE 255 // buffer size
 
-char *message = "Hello From Server!";
+char *message = "HTTP/1.1 200 OK\r\n\r\nHello From Server!";
 
 void clr(char *, int);
 
@@ -83,7 +83,6 @@ restart:
         if(buffer[BUFF_SIZE - 1] == '\0') {
             clr(buffer, BUFF_SIZE);
             printf("INFO: preparing to send response, dected request end\n");
-            sprintf(buffer, "HTTP/1.1 200 OK\r\n\r\n");
             // To change the message sent, change it above.
             sprintf(buffer, message);
             printf("INFO: buffer length is : %d\n", strlen(buffer));
