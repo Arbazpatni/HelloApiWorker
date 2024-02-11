@@ -62,7 +62,8 @@ restart:
     int nfd = accept(fd, (struct sockaddr *) &client_address, &client_len); // create a new socket file descriptor to hold the new connection and pass the socket file descriptor
     if(nfd < 0) {
         printf("ERROR: Accept failed\n");
-        if(nfd != NULL) close(nfd);
+        // close(nfd); //Because the below statement will run allways
+        if(nfd == -1) close(nfd);
         goto restart;
     }
     else {
@@ -84,7 +85,7 @@ restart:
             clr(buffer, BUFF_SIZE);
             printf("INFO: preparing to send response, dected request end\n");
             // To change the message sent, change it above.
-            sprintf(buffer, message);
+            sprintf(buffer, "%s", message);
             printf("INFO: buffer length is : %d\n", strlen(buffer));
             bytes = write(nfd, buffer, strlen(buffer));
             if(bytes < 0) {
