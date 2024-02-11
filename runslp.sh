@@ -8,7 +8,7 @@ function worker() {
     done
 }
 function thread() {
-    until /app/Clis "3000" "1" #absolute path is very important otherwise error
+    until /app/Clis "10000" "1" #absolute path is very important otherwise error
     do
         echo "Sleep Thread Process Crasher with exit code $?, Respawning ..."
         sleep 1
