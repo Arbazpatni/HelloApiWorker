@@ -3,8 +3,9 @@ FROM alpine:latest AS builder
 RUN apk update && apk upgrade && apk add bash icu-libs gcc musl-dev
 COPY ./Cli.c /app/Cli.c
 COPY ./Clis.c /app/Clis.c
-RUN gcc -o /app/Cli /app/Cli.c
-RUN gcc -o /app/Clis /app/Clis.c
+COPY ./config.h /app/config.h
+RUN gcc -o /app/Cli /app/Cli.c /app/config.h
+RUN gcc -o /app/Clis /app/Clis.c /app/config.h
 FROM alpine:latest
 RUN apk update && apk upgrade && apk add bash icu-libs musl-dev
 COPY --from=backend /app/Cli ./app/TCli

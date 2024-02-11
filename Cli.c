@@ -7,8 +7,12 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
+#include "config.h" // Including my own config file.
+
 #define TRUE 1        // 1 means infinite loop
 #define BUFF_SIZE 255 // buffer size
+
+char *message = "Hello From Server!";
 
 void clr(char *, int);
 
@@ -52,6 +56,7 @@ int main(int argc, char *argv[]) {
     char buffer[BUFF_SIZE];
     int bytes = 0;
     clr(buffer, BUFF_SIZE);
+    printf("INFO: build time : %s\n", Build_Time);
 restart:
     printf("Waiting for new connection.....\n");
     int nfd = accept(fd, (struct sockaddr *) &client_address, &client_len); // create a new socket file descriptor to hold the new connection and pass the socket file descriptor
@@ -78,14 +83,17 @@ restart:
         if(buffer[BUFF_SIZE - 1] == '\0') {
             clr(buffer, BUFF_SIZE);
             printf("INFO: preparing to send response, dected request end\n");
-            sprintf(buffer, "HTTP/1.1 200 OK\r\n\r\nHello From Server!");
+            sprintf(buffer, "HTTP/1.1 200 OK\r\n\r\n");
+            // To change the message sent, change it above.
+            sprintf(buffer, message);
+            printf("INFO: buffer length is : %d\n", strlen(buffer));
             bytes = write(nfd, buffer, strlen(buffer));
             if(bytes < 0) {
                 printf("ERROR: cannot write to the client\n");
                 close(nfd);
                 goto restart;
             }
-            else if(bytes == 37) {
+            else if(bytes == strlen(buffer)) {
                 printf("INFO: successfully sent the response!\n");
                 //sleep(5);
                 printf("INFO: resuming to reset connection\n");
@@ -93,7 +101,7 @@ restart:
                 goto restart;
             }
             else {
-                printf("ERROR: Sent bytes not equal to 37 something is fishy!\n");
+                printf("ERROR: Sent bytes not equal to %d something is fishy!\n", strlen(buffer));
                 close(nfd);
                 goto restart;
                 //continue;
