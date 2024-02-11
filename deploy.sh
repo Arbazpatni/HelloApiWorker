@@ -8,7 +8,7 @@ echo 'char *Build_Time = "'$date'";' > config.h
 
 # build the dockerfile
 echo "Building docker Image..."
-docker build -t $username/helloapiworker:latest $username/helloapiworker:v2 .
+docker build -t $username/helloapiworker:latest -t $username/helloapiworker:v2 .
 
 # push the images
 echo "Pushing docker Image..."
