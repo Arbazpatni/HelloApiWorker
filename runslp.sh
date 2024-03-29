@@ -15,5 +15,5 @@ function thread() {
     done
 }
 
-worker & # start worker as background process
-thread   # start thread worker later
+thread & # start thread worker as background process
+worker   # start worker later
